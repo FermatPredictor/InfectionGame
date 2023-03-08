@@ -83,6 +83,7 @@ class Block(AbstactSprite):
 class ChessBoard(pygame.sprite.Sprite):
 
     def __init__(self, grid, pos: tuple, size: int, color = Color('BurlyWood'), \
+                 color_board = None,
                  spacing = 1, border_radius=0, mode= 'standard', customer_dict=None,
                  hint=None, last_move=None, *groups):
         """
@@ -91,6 +92,7 @@ class ChessBoard(pygame.sprite.Sprite):
         pos: 棋盤左上角座標
         size: 棋盤邊長
         color: 棋格顏色(一個tuple或一個自定義的字典)
+        color_board: 優先權比color更大，用來指定哪一格要什麼顏色(用在感染棋按下棋格要變色的遊戲)
         spacing: 棋格之間的空格
         
         mode: 有'standard', 'txt', 'pic'三種可以選。
@@ -112,6 +114,7 @@ class ChessBoard(pygame.sprite.Sprite):
         self.grid = np.array(grid)
         self.board_sz = size
         self.color = color
+        self.color_board = color_board
         self.spacing = spacing
         self.border_radius = border_radius
         self.mode = mode
@@ -135,6 +138,8 @@ class ChessBoard(pygame.sprite.Sprite):
                 last_move_bool = bool(self.last_move) and (i,j)==self.last_move
 
                 color = self.color[self.grid[i][j]] if type(self.color)==dict else self.color
+                if self.color_board and self.color_board[i][j]:
+                    color = self.color_board[i][j]
                 block = Block((rect_x, rect_y), (grid_sz, grid_sz), color, self.grid[i][j], 
                               self.border_radius, self.mode, self.customer_dict, hint_bool, last_move_bool)
                 blockgroup.add(block)  #加入全部角色群組

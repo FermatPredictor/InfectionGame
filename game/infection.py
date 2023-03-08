@@ -78,6 +78,9 @@ def action(turn, board, move):
         if in_board(tr,tc) and board[tr][tc]==3-turn:
             board[tr][tc] = turn
 
+def is_over(turn, board):
+    return not valid_move(turn, board)
+
 if __name__=='__main__':
     board = [[0,1,2,1],
             [0,1,2,0],
